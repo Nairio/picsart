@@ -42,8 +42,7 @@ const App = () => {
     }
 
     const onLoadImageHandler = async (e: React.FormEvent<HTMLInputElement>) => {
-        if (!canvas || !ctx) return;
-        updateImage(canvas, ctx, await onLoadImage(e));
+        canvas && ctx && updateImage(canvas, ctx, await onLoadImage(e));
     }
 
     const updateImage = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, imageSRC: string) => {
@@ -58,11 +57,9 @@ const App = () => {
 
     return (
         <div className={`container${selected ? " selected" : ""}`}>
-
             <div className={"picker-container"} onClick={onSelectHandler}>
                 <div className={"picker"}/>
             </div>
-
             <div className={"image-input"}>
                 {!loading
                     ? (<input type="file" onInput={onLoadImageHandler}/>)
@@ -71,7 +68,6 @@ const App = () => {
                         <CircularProgress/></div>)
                 }
             </div>
-
             <div className={"canvas-container"}>
                 <div className={"color"}>
                     <div className={"bg"} style={{background: color}}/>

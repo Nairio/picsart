@@ -94,7 +94,7 @@ const pixelateImage = async (image: HTMLImageElement, cw: number, ch: number, cu
     canvas.height = ch;
 
     drawCubes(image, ctx, cw, ch, cub);
-    drawTable(ctx, cw, ch, cub);
+    //drawTable(ctx, cw, ch, cub);
 
     return getImage(canvas.toDataURL())
 };
