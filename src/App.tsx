@@ -3,7 +3,6 @@ import "./App.css";
 import imageSRC from "./image.jpg";
 import {initImageCanvas, onClick, onMouseMove, onMouseOut} from "./functions";
 
-const radius = 70;
 const zoom = 1;
 const pixelSize = 6;
 
@@ -32,7 +31,7 @@ const App = () => {
     }
 
     const onMouseMoveHandler = (e: React.MouseEvent<HTMLCanvasElement>) => {
-        pImg && img && canvas && ctx && selected && onMouseMove(e, radius, zoom, pixelSize, pImg, img, selected, canvas, ctx)
+        pImg && img && canvas && ctx && selected && onMouseMove(e, zoom, pixelSize, pImg, img, selected, canvas, ctx)
     }
 
     const onMouseOutHandler = () => {

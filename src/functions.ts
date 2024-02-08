@@ -78,7 +78,7 @@ export const drawLabel: (ctx: CanvasRenderingContext2D, hex: string, mx: number,
 
     ctx.fillText(hex, mx, my + top, width - width * 0.1);
 };
-export const onMouseMove = (e: React.MouseEvent<HTMLCanvasElement>, r: number, z: number, p: number, pImg: HTMLImageElement, img: HTMLImageElement, selected: Boolean, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
+export const onMouseMove = (e: React.MouseEvent<HTMLCanvasElement>, z: number, p: number, pImg: HTMLImageElement, img: HTMLImageElement, selected: Boolean, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
     const rect = canvas.getBoundingClientRect();
     const cw = canvas.width;
     const ch = canvas.height;
@@ -86,6 +86,8 @@ export const onMouseMove = (e: React.MouseEvent<HTMLCanvasElement>, r: number, z
     const h = img.height;
     const mx = e.clientX - rect.left;
     const my = e.clientY - rect.top;
+
+    const r = cw / 14;
 
     const hex: string = getHex(ctx, mx, my);
 
