@@ -67,3 +67,8 @@ canvas {
     justify-content: center;
     flex-wrap: wrap;
 }
+
+.image-input {
+    position: absolute;
+    top: 100px;
+}
