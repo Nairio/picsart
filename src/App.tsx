@@ -2,9 +2,10 @@ import React, {useEffect, useRef, useState} from "react";
 import "./App.css";
 import {initImageCanvas, onClick, onLoadImage, onMouseMove, onMouseOut} from "./functions";
 import {CircularProgress} from '@mui/material';
+import imageSRC from "./image.jpg";
 
-const zoom = 0.25;
-const pixelSize = 24;
+const cub = 4;
+const zoom = 1;
 
 const App = () => {
     const [loading, setLoading] = useState<Boolean>(false);
@@ -21,6 +22,7 @@ const App = () => {
         const ctx = canvas.getContext("2d", {willReadFrequently: true}) as CanvasRenderingContext2D;
         setCanvas(canvas);
         setCTX(ctx);
+        updateImage(canvas, ctx, imageSRC);
     }, []);
 
     const onSelectHandler = () => {
@@ -28,7 +30,7 @@ const App = () => {
     }
 
     const onMouseMoveHandler = (e: React.MouseEvent<HTMLCanvasElement>) => {
-        pImg && img && canvas && ctx && selected && onMouseMove(e, zoom, pixelSize, pImg, img, selected, canvas, ctx)
+        pImg && img && canvas && ctx && selected && onMouseMove(e, pImg, img, selected, canvas, ctx, cub, zoom)
     }
 
     const onMouseOutHandler = () => {
@@ -41,17 +43,16 @@ const App = () => {
 
     const onLoadImageHandler = async (e: React.FormEvent<HTMLInputElement>) => {
         if (!canvas || !ctx) return;
+        updateImage(canvas, ctx, await onLoadImage(e));
+    }
 
-
-        setLoading(true);
-
-        const imageSRC = await onLoadImage(e);
-        initImageCanvas(canvas, ctx, imageSRC, pixelSize).then(({img, pimg}) => {
+    const updateImage = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, imageSRC: string) => {
+        initImageCanvas(canvas, ctx, imageSRC, cub).then(({img, pimg}) => {
+            setLoading(true);
             setImg(img);
             setPImg(pimg);
             setLoading(false);
         });
-
     }
 
 
