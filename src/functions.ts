@@ -52,7 +52,6 @@ export const getHex = (ctx: CanvasRenderingContext2D, mx: number, my: number): s
 export const pixelateImage = (image: HTMLImageElement, pixelSize: number): Promise<HTMLImageElement> => {
     return new Promise((resolve => {
         const canvas = document.createElement("canvas");
-        document.body.appendChild(canvas);
         const ctx = canvas.getContext("2d", {willReadFrequently: true}) as CanvasRenderingContext2D;
         canvas.width = image.width;
         canvas.height = image.height;
