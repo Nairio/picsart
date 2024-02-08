@@ -5,7 +5,7 @@ import {CircularProgress} from '@mui/material';
 import imageSRC from "./image.jpg";
 
 const cub = 4;
-const zoom = 1;
+const zoom = 1.5;
 
 const App = () => {
     const [loading, setLoading] = useState<Boolean>(false);
