@@ -3,9 +3,8 @@ import "./App.css";
 import {initImageCanvas, onClick, onLoadImage, onMouseMove, onMouseOut} from "./functions";
 import {CircularProgress} from '@mui/material';
 
-
-const zoom = 1;
-const pixelSize = 6;
+const zoom = 0.25;
+const pixelSize = 24;
 
 const App = () => {
     const [loading, setLoading] = useState<Boolean>(false);
@@ -53,8 +52,6 @@ const App = () => {
             setLoading(false);
         });
 
-
-
     }
 
 
@@ -68,7 +65,9 @@ const App = () => {
             <div className={"image-input"}>
                 {!loading
                     ? (<input type="file" onInput={onLoadImageHandler}/>)
-                    : (<div><div>Loading...</div><CircularProgress/></div>)
+                    : (<div>
+                        <div>Loading...</div>
+                        <CircularProgress/></div>)
                 }
             </div>
 

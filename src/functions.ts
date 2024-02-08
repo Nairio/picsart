@@ -1,4 +1,5 @@
 import React from "react";
+
 export const onLoadImage = (e: React.FormEvent<HTMLInputElement>): Promise<string> => {
     return new Promise((resolve => {
         const input = e.target as HTMLInputElement;
@@ -50,33 +51,42 @@ export const getHex = (ctx: CanvasRenderingContext2D, mx: number, my: number): s
 };
 export const pixelateImage = (image: HTMLImageElement, pixelSize: number): Promise<HTMLImageElement> => {
     return new Promise((resolve => {
-        setTimeout(() => {
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d", {willReadFrequently: true}) as CanvasRenderingContext2D;
-            canvas.width = image.width;
-            canvas.height = image.height;
+        const canvas = document.createElement("canvas");
+        document.body.appendChild(canvas);
+        const ctx = canvas.getContext("2d", {willReadFrequently: true}) as CanvasRenderingContext2D;
+        canvas.width = image.width;
+        canvas.height = image.height;
 
-            const numPixelsWide = Math.ceil(image.width / pixelSize);
-            const numPixelsHigh = Math.ceil(image.height / pixelSize);
+        const numPixelsWide = Math.ceil(image.width / pixelSize);
+        const numPixelsHigh = Math.ceil(image.height / pixelSize);
 
-            ctx.strokeStyle = "white";
-            ctx.lineWidth = pixelSize / 100;
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = pixelSize / 100;
 
-            for (let y = 0; y < numPixelsHigh; y++) {
-                for (let x = 0; x < numPixelsWide; x++) {
-                    ctx.drawImage(image, x * pixelSize, y * pixelSize, pixelSize, pixelSize, x * pixelSize, y * pixelSize, pixelSize, pixelSize);
-                    const data = ctx.getImageData(x * pixelSize, y * pixelSize, pixelSize, pixelSize).data;
-                    const r = data[0];
-                    const g = data[1];
-                    const b = data[2];
-                    ctx.fillStyle = `rgb(${r},${g},${b})`;
-                    ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
-                    ctx.strokeRect(x * pixelSize + ctx.lineWidth / 2, y * pixelSize + ctx.lineWidth / 2, pixelSize - ctx.lineWidth, pixelSize - ctx.lineWidth);
-                }
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        const cw = canvas.width;
+        const ch = canvas.width;
+        const lw = ctx.lineWidth;
+        const lw2 = lw / 2;
+        const plw = pixelSize - lw;
+
+        for (let y = 0; y < ch; y += pixelSize) {
+            for (let x = 0; x < cw; x += pixelSize) {
+                const index = (y * cw + x) * 4;
+                const r = data[index];
+                const g = data[index + 1];
+                const b = data[index + 2];
+                ctx.fillStyle = `rgb(${r},${g},${b})`;
+                ctx.fillRect(x, y, pixelSize, pixelSize);
+               // ctx.strokeRect(x + lw2, y  + lw2, plw, plw);
             }
+        }
 
-            resolve(getImage(canvas.toDataURL()))
-        }, 1000)
+        resolve(getImage(canvas.toDataURL()))
     }))
 };
 export const drawPixelateImage = (ctx: CanvasRenderingContext2D, img: HTMLImageElement, mx: number, my: number, cw: number, ch: number, w: number, h: number, r: number, z: number, p: number): void => {
@@ -151,7 +161,10 @@ export const initImageCanvas = async (canvas: HTMLCanvasElement, ctx: CanvasRend
     const img = await getImage(imageSRC);
     canvas.width = document.body.offsetWidth * 0.7;
     canvas.height = canvas.width * img.height / img.width;
+
+    //console.time("pix");
     const pimg = await pixelateImage(img, p);
+    //console.timeEnd("pix");
 
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     return {img, pimg}
